@@ -1,6 +1,8 @@
 import mimetypes
 import smtplib
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def handler(event, context):
     sourceKey = event['Records'][0]['s3']['object']['key']
@@ -15,7 +17,7 @@ def handler(event, context):
         emailContent += "UNKONWN"
     else:
         emailContent += encoding
-    print("File results is: %s", emailContent)
+    logger.info(f'File results is: {emailContent}')
     
     #Sending email logic
     from_mail = 'noreply-eli@gmail.com'
@@ -23,7 +25,7 @@ def handler(event, context):
 
     s = smtplib.SMTP('172.17.0.1')
     subject = 'Eli Yaacov - Viz home test'
-    print("Sending mail to %s", to_mail)
+    logger.info(f'Sending mail to {to_mail}')
 
     message = f"""\
           Subject: {subject}
@@ -32,5 +34,5 @@ def handler(event, context):
           {emailContent}"""
     result = s.sendmail(from_mail, to_mail, message)
     s.quit()
-    print("Sending email results are: %s", result)
+    logger.info(f'Sending email results are: {result}')
     context.done()
