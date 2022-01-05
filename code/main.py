@@ -38,6 +38,7 @@ def handler(event, context):
     SUBJECT = 'Eli Yaacov - Viz home test'
     CHARSET = "UTF-8"
     client = boto3.client('ses',region_name=AWS_REGION)
+    var response
     # Try to send the email.
     try:
         #Provide the contents of the email.
