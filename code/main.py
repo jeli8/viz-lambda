@@ -6,7 +6,7 @@ def send_email(emailContent):
     from_mail = 'noreply-eli@gmail.com'
     to_mail = 'eliezerj8@gmail.com'
 
-    s = smtplib.SMTP('host.docker.internal')
+    s = smtplib.SMTP('172.17.0.1')
     subject = 'Eli Yaacov - Viz home test'
     print("Sending mail to %s", to_mail)
 
