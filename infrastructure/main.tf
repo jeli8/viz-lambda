@@ -2,11 +2,11 @@
    required_providers {
      aws = {
        source  = "hashicorp/aws"
-       Version = "~>3.27"
+       version = "3.27.0"
      }
    }
 
-   required_version = ">=0.13.3"
+   required_version = "0.13.3"
    backend "s3" {
      bucket = "viz-remote-states-bucket"
      key    = "viz-lambda/infra"
@@ -16,7 +16,7 @@
  }
 
  provider "aws" {
-   version = "~>3.0"
+   version = "3.27.0"
    region  = "us-east-1"
  }
 
