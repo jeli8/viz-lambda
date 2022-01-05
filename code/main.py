@@ -33,3 +33,4 @@ def handler(event, context):
     result = s.sendmail(from_mail, to_mail, message)
     s.quit()
     print("Sending email results are: %s", result)
+    context.done()
