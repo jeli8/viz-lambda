@@ -9,7 +9,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 def handler(event, context):
-    SENDER = 'noreply-eli@gmail.com'
+    SENDER = 'eliezerj8@gmail.com'
     to_mail = 'eliezerj8@gmail.com'
     sourceKey = event['Records'][0]['s3']['object']['key']
     (guessedType, encoding) = mimetypes.guess_type(sourceKey)
