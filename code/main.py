@@ -18,7 +18,7 @@ def handler(event, context):
         emailContent += "UNKONWN"
     else:
         emailContent += encoding
-    logger.info(f'File results is: {emailContent}')
+    
     
     #Sending email logic
     from_mail = 'noreply-eli@gmail.com'
@@ -26,7 +26,6 @@ def handler(event, context):
 
     s = smtplib.SMTP('172.17.0.1')
     subject = 'Eli Yaacov - Viz home test'
-    logger.info(f'Sending mail to {to_mail}')
 
     message = f"""\
           Subject: {subject}
@@ -35,5 +34,5 @@ def handler(event, context):
           {emailContent}"""
     result = s.sendmail(from_mail, to_mail, message)
     s.quit()
-    logger.info(f'Sending email results are: {result}')
+    logger.info(f'Sent email with content - {emailContent} , results are: {result}')
     context.done()
