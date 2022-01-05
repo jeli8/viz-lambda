@@ -26,8 +26,6 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "Waiting for a while to the image to be ready in ECR..."
-          sleep 30
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
