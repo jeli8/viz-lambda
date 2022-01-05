@@ -2,7 +2,22 @@ import mimetypes
 import smtplib
 
 
-def send_email(emailContent):
+def handler(event, context):
+    sourceKey = event['Records'][0]['s3']['object']['key']
+    (guessedType, encoding) = mimetypes.guess_type(sourceKey)
+    emailContent = "Type is: "
+    if guessedType is None:
+        emailContent += "UNKNOWN"
+    else:
+        emailContent += guessedType
+    emailContent += ", And file encoding is: "
+    if encoding is None:
+        emailContent += "UNKONWN"
+    else:
+        emailContent += encoding
+    print("File results is: %s", emailContent)
+    
+    #Sending email logic
     from_mail = 'noreply-eli@gmail.com'
     to_mail = 'eliezerj8@gmail.com'
 
@@ -17,20 +32,4 @@ def send_email(emailContent):
           {emailContent}"""
     result = s.sendmail(from_mail, to_mail, message)
     s.quit()
-    
-
-def handler(event, context):
-    sourceKey = event['Records'][0]['s3']['object']['key']
-    (guessedType, encoding) = mimetypes.guess_type(sourceKey)
-    res = "Type is: "
-    if guessedType is None:
-        res += "UNKNOWN"
-    else:
-        res += guessedType
-    res += ", And file encoding is: "
-    if encoding is None:
-        res += "UNKONWN"
-    else:
-        res += encoding
-    print("File results is: %s", res)
-    send_email(res)
+    print("Sending email results are: %s", result)
