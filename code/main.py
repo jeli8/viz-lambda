@@ -1,12 +1,13 @@
 import mimetypes
 import smtplib
 import logging
+import boto3
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 def handler(event, context):
-    from_mail = 'noreply-eli@gmail.com'
+    SENDER = 'noreply-eli@gmail.com'
     to_mail = 'eliezerj8@gmail.com'
     sourceKey = event['Records'][0]['s3']['object']['key']
     (guessedType, encoding) = mimetypes.guess_type(sourceKey)
@@ -20,16 +21,51 @@ def handler(event, context):
         emailContent += "UNKONWN"
     else:
         emailContent += encoding
+
+    logger.info(f'Sending email with content - {emailContent}')
+
+    ### Sending email logic
+    DESTINATION = {
+                        'ToAddresses': [
+                            to_mail,
+                        ],
+                        'BccAddresses': [
+                        ]
+                    }
+    AWS_REGION = "us-east-1"
+    SUBJECT = 'Eli Yaacov - Viz home test'
+    CHARSET = "UTF-8"
+    client = boto3.client('ses',region_name=AWS_REGION)
+    # Try to send the email.
+    try:
+        #Provide the contents of the email.
+        response = client.send_email(
+            Destination = DESTINATION,
+            Message={
+                'Body': {
+                    'Text': {
+                        'Charset': CHARSET,
+                        'Data': emailContent,
+                    },
+                },
+                'Subject': {
+                    'Charset': CHARSET,
+                    'Data': SUBJECT,
+                },
+            },
+            Source=SENDER,
+            # If you are not using a configuration set, comment or delete the
+            # following line
+            #ConfigurationSetName=CONFIGURATION_SET,
+        )
+    # Display an error if something goes wrong.	
+    except ClientError as e:
+        logger.error(e.response['Error']['Message'])
+    else:
+        logger.info("Email sent! Message ID:")
+        logger.info(response['MessageId'])
     
-    #Sending email logic
-    s = smtplib.SMTP('172.17.0.1')
-    subject = 'Eli Yaacov - Viz home test'
-    message = f"""\
-          Subject: {subject}
-          To: {to_mail}
-          From: {from_mail}
-          {emailContent}"""
-    result = s.sendmail(from_mail, to_mail, message)
-    s.quit()
-    logger.info(f'Sent email with content - {emailContent} , results are: {result}')
-    context.done()
+    return {
+        'statusCode': 200,
+        'body': json.dumps(response)
+    }
