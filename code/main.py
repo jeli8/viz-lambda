@@ -1,4 +1,5 @@
 import mimetypes
+import smtplib
 
 
 def send_email(emailContent):
