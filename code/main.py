@@ -1,7 +1,8 @@
 import mimetypes
-import smtplib
 import logging
 import boto3
+from botocore.exceptions import ClientError
+
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
