@@ -1,7 +1,7 @@
 import mimetypes
 
 
-def send_email(emailContent)
+def send_email(emailContent):
     from_mail = 'noreply-eli@gmail.com'
     to_mail = 'eliezerj8@gmail.com'
 
